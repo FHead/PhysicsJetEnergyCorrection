@@ -1,0 +1,4 @@
+# ./Execute --Version Summer19UL17_RunB_V5_DATA --Algorithm AK8PFchs --Level L1RC --Dependent Eta --Min -5.18 --Max 5.18 --NBin -1 --FixPT 100 --FixRho 20 --ReducedEta false --DoOldEta false --FixArea 2.0106176
+# ./Execute --Version Fall17_17Nov2017B_V32_DATA --Algorithm AK8PFchs --Level L1RC --Dependent Eta --Min -5.18 --Max 5.18 --NBin -1 --FixPT 100 --FixRho 20 --ReducedEta false --DoOldEta false --FixArea 2.0106176
+./Execute --Version Summer19UL17_RunB_V6_DATA --Algorithm AK4PFchs --Level L1RC --Dependent Eta --Min -5.18 --Max 5.18 --NBin -1 --FixPT 100 --FixRho 20 --ReducedEta false --DoOldEta false --FixArea 2.0106176
+./Execute --Version Summer19UL17_RunB_V6_DATA --Algorithm AK4PFchs --Level L1RC --Dependent Eta --Min -5.18 --Max 5.18 --NBin -1 --FixPT 100 --FixRho 20 --ReducedEta false --DoOldEta false --FixArea 2.0106176
