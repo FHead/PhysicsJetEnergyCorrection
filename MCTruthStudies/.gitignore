@@ -1,0 +1,9 @@
+*.root
+*.pdf
+Execute*
+*.pyc
+*.condor
+*.txt
+SynchTree
+chenyi.cc
+a.out
