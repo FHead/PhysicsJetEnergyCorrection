@@ -159,7 +159,7 @@ function LoadDefaultSetup()
 {
    $('#CurveCount').val(3);
 
-   var Version = "Autumn18_RunA_V8_DATA";
+   var Version = "Autumn18_RunA_V16_DATA";
    var Algorithm = "AK4PFchs";
    var Level = "L1FastJet";
    var Curve = "Eta_Rho40.00_PT100.00";
@@ -169,7 +169,7 @@ function LoadDefaultSetup()
    if(Level in JECData[Version][Algorithm])          $("#Level1").val(Level);
    if(Curve in JECData[Version][Algorithm][Level])   $("#Curve1").val(Curve);
    
-   Version = "Autumn18_RunA_V8_DATA";
+   Version = "Autumn18_RunA_V16_DATA";
    Algorithm = "AK4PFchs";
    Level = "L2Relative";
    Curve = "Eta_Rho40.00_PT100.00";
@@ -179,7 +179,7 @@ function LoadDefaultSetup()
    if(Level in JECData[Version][Algorithm])          $("#Level2").val(Level);
    if(Curve in JECData[Version][Algorithm][Level])   $("#Curve2").val(Curve);
    
-   Version = "Autumn18_RunA_V8_DATA";
+   Version = "Autumn18_RunA_V16_DATA";
    Algorithm = "AK4PFchs";
    Level = "L1L2L3";
    Curve = "Eta_Rho40.00_PT100.00";
@@ -329,6 +329,8 @@ function Initialize()
 
    LoadFromHash();
 
+   console.log("Initializing viewer!");
+
    // console.log('Initialize: ' + $('#Curve1').val());
 
    for(var i = 0; i < MaxCurveCount; i++)
@@ -387,7 +389,14 @@ function Initialize()
       var Height = $('#ChartDiv').height() / 96.0;
       var PdfFile = new jsPDF({orientation: 'landscape', unit: 'in', format: [Width, Height], compressPdf: true});
       PdfFile.addImage({imageData: Chart.getImageURI(), x: 0, y: 0, compression: 'SLOW'});
-      PdfFile.save('JECChart.pdf');
+
+      var DefaultFileName = $('#Version1').val();
+      DefaultFileName = DefaultFileName + "__" + $('#Algorithm1').val();
+      DefaultFileName = DefaultFileName + "__" + $('#Level1').val();
+      DefaultFileName = DefaultFileName + "__" + $('#Curve1').val();
+      DefaultFileName = DefaultFileName + ".pdf";
+
+      PdfFile.save(DefaultFileName);
    });
 }
 

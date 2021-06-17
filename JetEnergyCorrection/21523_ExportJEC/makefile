@@ -47,3 +47,31 @@ Recover:
 		| sed "s/},}/}}/g" | sed "s/},}/}}/g" \
 		| sed "s/],]/]]/g" > JECTemp.js
 	python3 RecoverFragments.py
+
+ReRunSummer19UL17: Execute
+	for i in Fragments/Summer19UL17*; do j=`basename $$i`; echo $$j; bash MakeSingleData.sh $${j/.txt/} > FragmentsTemp/$$j; done
+
+ReRunSummer19UL18: Execute
+	for i in Fragments/Summer19UL18*; do j=`basename $$i`; echo $$j; bash MakeSingleData.sh $${j/.txt/} > FragmentsTemp/$$j; done
+
+ReRunFall17: Execute
+	for i in Fragments/Fall17*; do j=`basename $$i`; echo $$j; bash MakeSingleData.sh $${j/.txt/} > FragmentsTemp/$$j; done
+
+ReRunAutumn18: Execute
+	for i in Fragments/Autumn18*; do j=`basename $$i`; echo $$j; bash MakeSingleData.sh $${j/.txt/} > FragmentsTemp/$$j; done
+
+ReRunSummer16: Execute
+	for i in Fragments/Summer16*; do j=`basename $$i`; echo $$j; bash MakeSingleData.sh $${j/.txt/} > FragmentsTemp/$$j; done
+
+ReRunSummer18: Execute
+	for i in Fragments/Summer18*; do j=`basename $$i`; echo $$j; bash MakeSingleData.sh $${j/.txt/} > FragmentsTemp/$$j; done
+
+ReRunSpring1618: Execute
+	for i in Fragments/Spring1[68]*; do j=`basename $$i`; echo $$j; bash MakeSingleData.sh $${j/.txt/} > FragmentsTemp/$$j; done
+
+ReRunHLT: Execute
+	for i in Fragments/HLT_*; do j=`basename $$i`; echo $$j; bash MakeSingleData.sh $${j/.txt/} > FragmentsTemp/$$j; done
+
+CopyFromTemp:
+	cp `grep -v ", -1" FragmentsTemp/*txt | grep "\":" | awk '{print $$1}' | uniq | sed "s/:$$//"` Fragments/
+

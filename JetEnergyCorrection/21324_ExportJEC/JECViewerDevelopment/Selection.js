@@ -50,7 +50,7 @@ function SetListOfCurves(VersionItem, AlgorithmItem, LevelItem, Item)
 function ShowHideSelector()
 {
    var CurveCount = $('#CurveCount').val();
-   if(CurveCount > 5 || CurveCount <= 0)
+   if(CurveCount > MaxCurveCount || CurveCount <= 0)
       CurveCount = 1;
 
    for(var i = 0; i < MaxCurveCount; i++)
@@ -93,12 +93,12 @@ function CheckCurves(VersionItem, AlgorithmItem, LevelItem, Item)
    var Level = LevelItem.val();
    var Curve = Item.val();
 
-   console.log("CheckCurve " + Version);
-   console.log("CheckCurve " + Algorithm);
-   console.log("CheckCurve " + Level);
-   console.log("CheckCurve " + Curve);
-   console.log(Item);
-   console.log(Item.val());
+   // console.log("CheckCurve " + Version);
+   // console.log("CheckCurve " + Algorithm);
+   // console.log("CheckCurve " + Level);
+   // console.log("CheckCurve " + Curve);
+   // console.log(Item);
+   // console.log(Item.val());
 
    if((Algorithm in JECData[Version]) && (Level in JECData[Version][Algorithm])
       && (Curve in JECData[Version][Algorithm][Level]))
@@ -141,7 +141,7 @@ function LevelChange(VersionItem, AlgorithmItem, LevelItem, CurveItem)
    if(CheckCurves(VersionItem, AlgorithmItem, LevelItem, CurveItem) == true)
       Curve = CurveItem.val();
 
-   console.log("LevelChange" + Curve);
+   // console.log("LevelChange" + Curve);
 
    SetListOfCurves(VersionItem, AlgorithmItem, LevelItem, CurveItem);
 
@@ -206,9 +206,12 @@ function UpdateHash()
             + $('#Version'+(i+1)).val() + ","
             + $('#Algorithm'+(i+1)).val() + ","
             + $('#Level'+(i+1)).val() + ","
-            + $('#Curve'+(i+1)).val();
+            + $('#Curve'+(i+1)).val() + ","
+            + $('#HideBand'+(i+1)+':checked').length;
       }
    }
+
+   HashString = HashString + "&" + "ForceLinear=" + $('#ForceLinear:checked').length;
 
    window.location.hash = HashString;
 }
@@ -224,17 +227,19 @@ function LoadFromHash()
       return;
    }
 
-   var Curves = HashString.split("+");
+   var Curves = HashString.split('&')[0].split("+");
+   var ExtraInformation = HashString.split('&');
+   ExtraInformation.shift();
 
-   console.log("HashLoad split");
-   console.log(Curves);
+   // console.log("HashLoad split");
+   // console.log(Curves);
 
    CurveCount = Curves.length;
    if(CurveCount > MaxCurveCount)
       CurveCount = MaxCurveCount;
    $('#CurveCount').val(CurveCount);
 
-   var Version, Algorithm, Level, Curve;
+   var Version, Algorithm, Level, Curve, HideBand;
 
    var Error = false;
 
@@ -248,6 +253,10 @@ function LoadFromHash()
       Algorithm = Split[1];
       Level     = Split[2];
       Curve     = Split[3];
+      if(Split.length > 4 && Split[4] == '0')
+         HideBand = false;
+      else
+         HideBand = true;
 
       if(Version in JECData)
       {
@@ -257,8 +266,8 @@ function LoadFromHash()
       else
          Error = true;
 
-      console.log("HashLoad " + Version);
-      console.log("HashLoad " + Error);
+      // console.log("HashLoad " + Version);
+      // console.log("HashLoad " + Error);
       
       if(Error == false && (Algorithm in JECData[Version]))
       {
@@ -268,8 +277,8 @@ function LoadFromHash()
       else
          Error = true;
       
-      console.log("HashLoad " + Algorithm);
-      console.log("HashLoad " + Error);
+      // console.log("HashLoad " + Algorithm);
+      // console.log("HashLoad " + Error);
       
       if(Error == false && (Level in JECData[Version][Algorithm]))
       {
@@ -279,8 +288,8 @@ function LoadFromHash()
       else
          Error = true;
       
-      console.log("HashLoad " + Level);
-      console.log("HashLoad " + Error);
+      // console.log("HashLoad " + Level);
+      // console.log("HashLoad " + Error);
       
       if(Error == false && (Curve in JECData[Version][Algorithm][Level]))
       {
@@ -290,8 +299,18 @@ function LoadFromHash()
       else
          Error = true;
       
-      console.log("HashLoad " + Curve);
-      console.log("HashLoad " + Error);
+      // console.log("HashLoad " + Curve);
+      // console.log("HashLoad " + Error);
+
+      $('#HideBand'+(i+1)).prop('checked', HideBand);
+   }
+
+   for(var i = 0; i < ExtraInformation.length; i++)
+   {
+      if(ExtraInformation[i] == "ForceLinear=0")
+         $('#ForceLinear').prop("checked", false);
+      if(ExtraInformation[i] == "ForceLinear=1")
+         $('#ForceLinear').prop("checked", true);
    }
 
    if(Error == true)
@@ -310,7 +329,7 @@ function Initialize()
 
    LoadFromHash();
 
-   console.log('Initialize: ' + $('#Curve1').val());
+   // console.log('Initialize: ' + $('#Curve1').val());
 
    for(var i = 0; i < MaxCurveCount; i++)
       VersionChange($('#Version'+(i+1)), $('#Algorithm'+(i+1)), $('#Level'+(i+1)), $('#Curve'+(i+1)));
@@ -329,24 +348,37 @@ function Initialize()
    $('#Version3').change(function(){VersionChange($('#Version3'), $('#Algorithm3'), $('#Level3'), $('#Curve3')); UpdateGraph(); UpdateHash();});
    $('#Version4').change(function(){VersionChange($('#Version4'), $('#Algorithm4'), $('#Level4'), $('#Curve4')); UpdateGraph(); UpdateHash();});
    $('#Version5').change(function(){VersionChange($('#Version5'), $('#Algorithm5'), $('#Level5'), $('#Curve5')); UpdateGraph(); UpdateHash();});
+   $('#Version6').change(function(){VersionChange($('#Version6'), $('#Algorithm6'), $('#Level6'), $('#Curve6')); UpdateGraph(); UpdateHash();});
    
    $('#Algorithm1').change(function(){AlgorithmChange($('#Version1'), $('#Algorithm1'), $('#Level1'), $('#Curve1')); UpdateGraph(); UpdateHash();});
    $('#Algorithm2').change(function(){AlgorithmChange($('#Version2'), $('#Algorithm2'), $('#Level2'), $('#Curve2')); UpdateGraph(); UpdateHash();});
    $('#Algorithm3').change(function(){AlgorithmChange($('#Version3'), $('#Algorithm3'), $('#Level3'), $('#Curve3')); UpdateGraph(); UpdateHash();});
    $('#Algorithm4').change(function(){AlgorithmChange($('#Version4'), $('#Algorithm4'), $('#Level4'), $('#Curve4')); UpdateGraph(); UpdateHash();});
    $('#Algorithm5').change(function(){AlgorithmChange($('#Version5'), $('#Algorithm5'), $('#Level5'), $('#Curve5')); UpdateGraph(); UpdateHash();});
+   $('#Algorithm6').change(function(){AlgorithmChange($('#Version6'), $('#Algorithm6'), $('#Level6'), $('#Curve6')); UpdateGraph(); UpdateHash();});
    
    $('#Level1').change(function(){LevelChange($('#Version1'), $('#Algorithm1'), $('#Level1'), $('#Curve1')); UpdateGraph(); UpdateHash();});
    $('#Level2').change(function(){LevelChange($('#Version2'), $('#Algorithm2'), $('#Level2'), $('#Curve2')); UpdateGraph(); UpdateHash();});
    $('#Level3').change(function(){LevelChange($('#Version3'), $('#Algorithm3'), $('#Level3'), $('#Curve3')); UpdateGraph(); UpdateHash();});
    $('#Level4').change(function(){LevelChange($('#Version4'), $('#Algorithm4'), $('#Level4'), $('#Curve4')); UpdateGraph(); UpdateHash();});
    $('#Level5').change(function(){LevelChange($('#Version5'), $('#Algorithm5'), $('#Level5'), $('#Curve5')); UpdateGraph(); UpdateHash();});
+   $('#Level6').change(function(){LevelChange($('#Version6'), $('#Algorithm6'), $('#Level6'), $('#Curve6')); UpdateGraph(); UpdateHash();});
                                                             
    $('#Curve1').change(function(){CurveChange($('#Version1'), $('#Algorithm1'), $('#Level1'), $('#Curve1')); UpdateGraph(); UpdateHash();});
    $('#Curve2').change(function(){CurveChange($('#Version2'), $('#Algorithm2'), $('#Level2'), $('#Curve2')); UpdateGraph(); UpdateHash();});
    $('#Curve3').change(function(){CurveChange($('#Version3'), $('#Algorithm3'), $('#Level3'), $('#Curve3')); UpdateGraph(); UpdateHash();});
    $('#Curve4').change(function(){CurveChange($('#Version4'), $('#Algorithm4'), $('#Level4'), $('#Curve4')); UpdateGraph(); UpdateHash();});
    $('#Curve5').change(function(){CurveChange($('#Version5'), $('#Algorithm5'), $('#Level5'), $('#Curve5')); UpdateGraph(); UpdateHash();});
+   $('#Curve6').change(function(){CurveChange($('#Version6'), $('#Algorithm6'), $('#Level6'), $('#Curve6')); UpdateGraph(); UpdateHash();});
+
+   $('#HideBand1').change(function(){UpdateGraph(); UpdateHash();});
+   $('#HideBand2').change(function(){UpdateGraph(); UpdateHash();});
+   $('#HideBand3').change(function(){UpdateGraph(); UpdateHash();});
+   $('#HideBand4').change(function(){UpdateGraph(); UpdateHash();});
+   $('#HideBand5').change(function(){UpdateGraph(); UpdateHash();});
+   $('#HideBand6').change(function(){UpdateGraph(); UpdateHash();});
+   
+   $('#ForceLinear').change(function(){UpdateGraph(); UpdateHash();});
 
    $('#Save').click(function()
    {

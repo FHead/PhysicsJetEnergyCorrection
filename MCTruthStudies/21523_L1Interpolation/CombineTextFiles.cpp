@@ -306,11 +306,11 @@ string GetG(CommandLine &CL)
    char R1[1024], R2[1024];
    char G1[1024], G2[1024];
 
-   if(XR > 0)   sprintf(R1, "(%.2f-t)/%.2f", XR, R0);
-   else         sprintf(R1, "(%.2f-t)/%.2f", XR, R0);
+   if(XR > 0)   sprintf(R1, "(%.4f-t)/%.2f", XR, R0);
+   else         sprintf(R1, "(%.4f-t)/%.2f", XR, R0);
    sprintf(G1, "(acos(max(-1.0,min(1.0,%s)))-%s*sqrt(1-min(1.0,%s*%s)))/TMath::Pi()", R1, R1, R1, R1);
-   if(XL > 0)   sprintf(R2, "(t-%.2f)/%.2f", XL, R0);
-   else         sprintf(R2, "(t+%.2f)/%.2f", -XL, R0);
+   if(XL > 0)   sprintf(R2, "(t-%.4f)/%.2f", XL, R0);
+   else         sprintf(R2, "(t+%.4f)/%.2f", -XL, R0);
    sprintf(G2, "(acos(max(-1.0,min(1.0,%s)))-%s*sqrt(1-min(1.0,%s*%s)))/TMath::Pi()", R2, R2, R2, R2);
 
    string G = string("(") + G1 + "+" + G2 + "-1)";

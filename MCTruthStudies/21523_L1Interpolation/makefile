@@ -1,7 +1,7 @@
 default: TestRun
 
 TestRun: Execute
-	./Execute --OutsideFileName Autumn18_V8_MC_L1FastJet_AK4PFchs.txt \
+	./Execute --OutsideFileName Autumn18_V16_MC_L1FastJet_AK4PFchs.txt \
 		--InsideFileName ParallelMC_L1FastJet_AK4PFchs.txt \
 		--Output Interpolated_L1FastJet_AK4PFchs.txt \
 		--PhiMin -1.8 --PhiMax -0.4 \

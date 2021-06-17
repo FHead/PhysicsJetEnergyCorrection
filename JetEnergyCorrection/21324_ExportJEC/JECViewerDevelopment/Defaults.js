@@ -1,9 +1,13 @@
-var DefaultColors = ['#A52714', '#097138', '#00FF00', '#FF0000', '#0000FF']
+// var DefaultColors = ['#A52714', '#097138', '#00FF00', '#FF0000', '#0000FF', '#FF00FF', '#008888']
+// Andreas May 14: wants black, red, blue, pink, yellow, green
+var DefaultColors = ['#2C3E50', '#E74C3C', '#3498DB', '#8E44AD', '#F1C40F', '#2ECC71']
+var DefaultWidth = 2;
 
 var Scale = 1;
 
 var DefaultOptions =
 {
+   interpolateNulls: true,
    hAxis:
    {
       title: 'X',
@@ -18,18 +22,17 @@ var DefaultOptions =
    },
    legend: {position: 'top', maxLines: 3, textStyle: {fontSize: 16}},
    chartArea: {width: '85%', height: '75%', left: '10%', top: '15%'},
-   colors: DefaultColors,
    explorer:
    {
       actions: ['dragToZoom', 'rightClickToReset'],
-      axis: 'horizontal',
+      // axis: 'horizontal',
       keepInBounds: true,
-      maxZoomIn: 0.1,
+      maxZoomIn: 0.05,
       maxZoomOut: 1.0,
       zoomDelta: 1.05
    },
 };
 
-var MaxCurveCount = 5;
+var MaxCurveCount = 6;
 
 

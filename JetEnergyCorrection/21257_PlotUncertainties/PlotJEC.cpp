@@ -142,23 +142,23 @@ int main(int argc, char *argv[])
    H2018C.SetLineColor(kMagenta);
    H2018C.SetLineStyle(kDashed);
    H2018D.SetLineWidth(2);
-   H2018D.SetLineColor(kMagenta);
+   H2018D.SetLineColor(kCyan);
    H2018D.SetLineStyle(kDashed);
 
-   TH2D HWorld("HWorld", "p_{T}^{Reco} = 100 GeV/c;#eta;Correction", 100, 0, 5.18, 100, 0.9, 1.25);
+   TH2D HWorld("HWorld", "p_{T}^{Reco} = 100 GeV/c;#eta;Correction", 100, 0, 5.18, 100, 0.85, 1.35);
    HWorld.SetStats(0);
 
    TCanvas Canvas;
    HWorld.Draw();
 
-   H2017B.Draw("same");
-   H2017C.Draw("same");
-   H2017DE.Draw("same");
-   H2017F.Draw("same");
-   H2018A.Draw("same");
-   H2018B.Draw("same");
-   H2018C.Draw("same");
-   H2018D.Draw("same");
+   H2017B.Draw("same e1");
+   H2017C.Draw("same e1");
+   H2017DE.Draw("same e1");
+   H2017F.Draw("same e1");
+   H2018A.Draw("same e1");
+   H2018B.Draw("same e1");
+   H2018C.Draw("same e1");
+   H2018D.Draw("same e1");
 
    TLegend Legend(0.15, 0.50, 0.45, 0.80);
    Legend.SetTextFont(42);

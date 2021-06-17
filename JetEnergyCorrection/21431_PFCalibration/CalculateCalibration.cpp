@@ -15,7 +15,27 @@ int main(int argc, char *argv[])
 {
    CommandLine CL(argc, argv);
 
-   string FileName = CL.Get("input", "PFCalibration2019_mc_UL2017.txt");
+   string FileName = CL.Get("Input", "PFCalibration2019_mc_UL2017.txt");
+   bool DoE        = CL.GetBool("DoE");
+   double FixPT    = CL.GetDouble("FixPT", 100);
+   double FixEta   = CL.GetDouble("FixEta", 0.0);
+   double FixPhi   = CL.GetDouble("FixPhi", 0.0);
+
+   string Dependent = CL.Get("Dependent");
+   double Min       = CL.GetDouble("Min");
+   double Max       = CL.GetDouble("Max");
+   int NBin         = CL.GetInt("NBin", 1000);
+
+   enum ModeType {Rho, PT, Eta, Phi, Area} Mode;
+
+   if(Dependent == "Rho")   Mode = Rho;
+   if(Dependent == "PT")    Mode = PT;
+   if(Dependent == "Eta")   Mode = Eta;
+   if(Dependent == "Phi")   Mode = Phi;
+
+   string Tag = Dependent;
+   if(Mode != PT)    Tag = Tag + Form("_PT%.02f", FixPT);
+   if(Mode != Eta)   Tag = Tag + Form("_Eta%.02f", FixEta);
 
    map<int, string> Labels;
    Labels[3001] = "aBarrel";
@@ -67,19 +87,42 @@ int main(int argc, char *argv[])
       if(Labels.find(ID) == Labels.end())
          continue;
 
-      F[Labels[ID]] = TF1(Labels[ID].c_str(), Formula.c_str());
+      F[Labels[ID]] = TF1(Labels[ID].c_str(), Formula.c_str(), Min, Max);
    }
-
-   double t = 60;
-   double ee = 10, hh = 30;
-   double e = ee, h = hh;
-   double eta = 0.5;
-   double phi = 3;
-
-   energyEmHad(t, e, h, eta, phi, F);
-   cout << t << " " << eta << " " << ee << " " << hh << " => " << e << " " << h << endl;
-
    in.close();
+   
+   cout << "            \"" << Tag << "\": {Data: [";
+   for(int i = 0; i <= NBin; i++)
+   {
+      double x;
+      if(Mode == PT)
+         x = exp(log(Min) + (log(Max) - log(Min)) / NBin * i);
+      else
+         x = Min + (Max - Min) / NBin * i;
+
+      double e = FixPT;
+      double h = FixPT;
+      double truept = FixPT;
+      double eta = FixEta;
+      double phi = FixPhi;
+
+      if(Mode == PT)
+         e = x, h = x, truept = x;
+      if(Mode == Eta)
+         eta = x;
+
+      if(DoE == true)    h = 0;
+      if(DoE == false)   e = 0;
+
+      energyEmHad(truept, e, h, eta, phi, F);
+
+      double y = (DoE ? e : h) / truept;
+
+      cout << "[" << x << ", " << y << "]";
+      if(i != NBin)
+         cout << ",";
+   }
+   cout << "]}," << endl;
 
    return 0;
 }
