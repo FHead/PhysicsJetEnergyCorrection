@@ -7,7 +7,7 @@ using namespace std;
 
 int main()
 {
-   map<int, vector<string>> LumiMap;
+   map<int, vector<string> > LumiMap;
 
    while(cin)
    {
@@ -25,12 +25,12 @@ int main()
          continue;
 
       if(LumiMap.find(Lumi) == LumiMap.end())
-         LumiMap.insert(pair<int, vector<string>>(Lumi, vector<string>()));
+         LumiMap.insert(pair<int, vector<string> >(Lumi, vector<string>()));
 
       LumiMap[Lumi].push_back(File);
    }
 
-   for(auto iter = LumiMap.begin(); iter != LumiMap.end(); iter++)
+   for(map<int, vector<string> >::iterator iter = LumiMap.begin(); iter != LumiMap.end(); iter++)
    {
       if(iter->second.size() != 2)
          continue;

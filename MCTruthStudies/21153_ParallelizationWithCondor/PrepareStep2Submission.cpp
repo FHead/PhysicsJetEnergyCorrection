@@ -11,7 +11,7 @@ void PrintJob(vector<string> &NoPU, vector<string> &PU, int Count);
 
 int main(int argc, char *argv[])
 {
-   map<string, vector<string>> FileMap;
+   map<string, vector<string> > FileMap;
 
    int Bundle = 5;
 
@@ -36,15 +36,15 @@ int main(int argc, char *argv[])
          continue;
 
       if(FileMap.find(FileNoPU) == FileMap.end())
-         FileMap.insert(pair<string, vector<string>>(FileNoPU, vector<string>()));
+         FileMap.insert(pair<string, vector<string> >(FileNoPU, vector<string>()));
 
       FileMap[FileNoPU].push_back(FilePU);
    }
 
-   for(auto iter : FileMap)
+   for(map<string, vector<string> >::iterator iter = FileMap.begin(); iter != FileMap.end(); iter++)
    {
-      sort(iter.second.begin(), iter.second.end());
-      iter.second.erase(unique(iter.second.begin(), iter.second.end()), iter.second.end());
+      sort(iter->second.begin(), iter->second.end());
+      iter->second.erase(unique(iter->second.begin(), iter->second.end()), iter->second.end());
    }
 
    int BundleCount = 0;
@@ -68,22 +68,22 @@ int main(int argc, char *argv[])
    vector<string> NoPUFileList;
    vector<string> PUFileList;
 
-   for(auto iter : FileMap)
+   for(map<string, vector<string> >::iterator iter = FileMap.begin(); iter != FileMap.end(); iter++)
    {
       if(Bundle == 1)
       {
          NoPUFileList.clear();
          PUFileList.clear();
 
-         NoPUFileList.push_back(iter.first);
-         PUFileList = iter.second;
+         NoPUFileList.push_back(iter->first);
+         PUFileList = iter->second;
       }
       else
       {
          BundleCount = BundleCount + 1;
          
-         NoPUFileList.push_back(iter.first);
-         PUFileList.insert(PUFileList.end(), iter.second.begin(), iter.second.end());
+         NoPUFileList.push_back(iter->first);
+         PUFileList.insert(PUFileList.end(), iter->second.begin(), iter->second.end());
 
          if(BundleCount % Bundle != 0)
             continue;
@@ -121,18 +121,18 @@ void PrintJob(vector<string> &NoPU, vector<string> &PU, int Count)
    string PUFile = "";
 
    NoPUFile = "";
-   for(auto File : NoPU)
+   for(vector<string>::iterator iter = NoPU.begin(); iter != NoPU.end(); iter++)
    {
       if(NoPUFile != "")
          NoPUFile = NoPUFile + ":";
-      NoPUFile = NoPUFile + File;
+      NoPUFile = NoPUFile + *iter;
    }
    PUFile = "";
-   for(auto File : PU)
+   for(vector<string>::iterator iter = PU.begin(); iter != PU.end(); iter++)
    {
       if(PUFile != "")
          PUFile = PUFile + ":";
-      PUFile = PUFile + File;
+      PUFile = PUFile + *iter;
    }
 
    cout << "echo \"Arguments = `pwd` "
