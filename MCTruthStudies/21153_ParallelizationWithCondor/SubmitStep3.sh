@@ -28,7 +28,7 @@ do
    echo 'Queue' >> $SubmissionFile
    echo >> $SubmissionFile
    
-   Count=`echo $Count | AddConst 1`
+   ((Count=Count+1))
 done
 
 condor_submit $SubmissionFile

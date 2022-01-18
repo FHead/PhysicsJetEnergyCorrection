@@ -17,7 +17,7 @@ echo "should_transfer_files = NO" >> $SubmissionFile
 echo >> $SubmissionFile
 
 Count=0
-for File in `ls $Input | Reformat 20 | tr ' ' ':'`
+for File in `ls $Input | ./Columnize 20 | tr ' ' ':'`
 do
    echo $File
 
@@ -28,7 +28,7 @@ do
    echo 'Queue' >> $SubmissionFile
    echo >> $SubmissionFile
 
-   Count=`echo $Count | AddConst 1`
+   ((Count=Count+1))
 done
 
 condor_submit $SubmissionFile
