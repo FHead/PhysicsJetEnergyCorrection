@@ -17,6 +17,21 @@ fi
 if [[ $Version == *"Flavor"* ]]; then
    AllLevel="L1FastJet:L1FastJet L2Relative:L2Relative L1L2L3:L1FastJet,L2Relative L5b:b_L5Flavor L5c:c_L5Flavor L5g:g_L5Flavor L5s:s_L5Flavor L5ud:ud_L5Flavor"
 fi
+if [[ $Version == *"Run3Winter21_V1_MC" ]]; then
+   AllLevel="L1FastJet:L1FastJet L2Relative:L2Relative L1L2L3:L1FastJet,L2Relative"
+fi
+if [[ $Version == *RAA*MC ]]; then
+   AllLevel="L2Relative:L2Relative L1L2L3:L1FastJet,L2Relative"
+fi
+if [[ $Version == *RAA*DATA ]]; then
+   AllLevel="L2Relative:L2Relative L1L2L3:L1FastJet,L2Relative L2Residual:L2Residual L2L3Residual:L2L3Residual L1L2L3L2L3Res:L1FastJet,L2Relative,L2L3Residual"
+fi
+if [[ $Version == *ppRef5TeV*MC ]]; then
+   AllLevel="L2Relative:L2Relative L1L2L3:L1FastJet,L2Relative"
+fi
+if [[ $Version == *pPb2016*MC ]]; then
+   AllLevel="L2Relative:L2Relative L1L2L3:L1FastJet,L2Relative"
+fi
 
 AlgorithmList="AK4PF AK4PFchs AK4PFPuppi AK8PF AK8PFchs AK8PFPuppi"
 ExtraAlgorithmList=""
@@ -35,7 +50,7 @@ if [[ $Version == *_"HI"_* ]]; then
    ExtraAlgorithmList=""
 fi
 if [[ $Version == *_"ppRef5TeV"_* ]]; then
-   AlgorithmList="AK2PF AK3PF AK4PF AK5PF AK6PF AK3Calo AK4Calo"
+   AlgorithmList="AK2PF AK3PF AK4PF AK5PF AK6PF"
    ExtraAlgorithmList=""
 fi
 if [[ $Version == *"_RAA"* ]]; then
@@ -52,6 +67,14 @@ if [[ $Version == "Fall17"* ]]; then
 fi
 if [[ $Version == *"Summer19UL"* ]]; then
    AlgorithmList="AK4PFchs AK4PFPuppi AK8PFchs AK8PFPuppi AK4PF AK8PF"
+   ExtraAlgorithmList=""
+fi
+if [[ $Version == *"Run3Winter21_V1_MC" ]]; then
+   AlgorithmList="AK4CaloHLT AK4PFchsHLT AK4PFClusterHLT AK4PFHLT AK4PFPuppiHLT AK8CaloHLT AK8PFchsHLT AK8PFClusterHLT AK8PFHLT AK8PFPuppiHLT"
+   ExtraAlgorithmList=""
+fi
+if [[ $Version == *pPb2016*MC ]]; then
+   AlgorithmList="AK4PF AK4PFchs AK4Calo"
    ExtraAlgorithmList=""
 fi
 
@@ -79,6 +102,8 @@ echo "   $Version:"
 echo "   {"
 for Algorithm in $AlgorithmList
 do
+   echo "Running $Algorithm" >&2
+
    Area=0.5026544
    if [[ $Algorithm == AK8* ]]; then
       Area=2.0106176
@@ -88,6 +113,8 @@ do
    echo "      {"
    for Level in $AllLevel
    do
+      echo "   $Level" >&2
+
       LevelTag=`echo $Level | cut --delim=':' --field=1`
       LevelName=`echo $Level | cut --delim=':' --field=2`
       echo "         $LevelTag:"
